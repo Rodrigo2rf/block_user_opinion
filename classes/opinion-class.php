@@ -87,6 +87,17 @@ class Opinion {
      * @param 
      * @return 
      */
+    function get_all_can_shared(){
+        global $DB;
+        $return = $DB->get_records('block_user_opinion_messages', array('shared' => 1));
+        return $return;
+    }
+
+    /**
+     * 
+     * @param 
+     * @return 
+     */
     function get_review_by_id($id){
         global $DB;
         $return = $DB->get_record('block_user_opinion_messages', array('id' => $id));
