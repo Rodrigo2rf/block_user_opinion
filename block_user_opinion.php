@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 require_once(dirname(__FILE__) . "/classes/instance-class.php");
-
+require_once(dirname(__FILE__) . "/classes/opinion-class.php");
 
 class block_user_opinion extends block_list{
 
@@ -34,7 +34,7 @@ class block_user_opinion extends block_list{
     }
   
     function get_content() {
-        global $CFG, $OUTPUT;
+        global $CFG, $OUTPUT, $USER;
 
         if ($this->content !== null) {
             return $this->content;
@@ -50,16 +50,30 @@ class block_user_opinion extends block_list{
 
         if( has_capability('block/user_opinion:manager', $context_sys) ) {
 
-            $this->content->items[] = html_writer::tag('a', get_string('managereviews', 'block_user_opinion'), array('href' => $CFG->wwwroot.'/blocks/user_opinion/manage_reviews.php'));
+            $this->content->items[] = html_writer::tag('a', get_string('managereviews', 'block_user_opinion'), array('href' => $CFG->wwwroot.'/blocks/user_opinion/manage_reviews.php?courseid='.$course->id));
 
             $this->content->items[] = html_writer::tag('a', get_string('manageinstances', 'block_user_opinion'), array('href' => $CFG->wwwroot.'/blocks/user_opinion/manage_instances.php'));
 
         }
 
         $instance = new Instance();
+        $opinion = new Opinion();
+
         $inst = $instance->get_instance_by_courseid($course->id);
         if( $inst->timeopen <= time() && $inst->timefinish >= time() ){
-            $this->content->items[] = html_writer::tag('a', get_string('searchavailable', 'block_user_opinion'), array('href' => $CFG->wwwroot.'/blocks/user_opinion/search_available.php?courseid='.$course->id));
+
+            $is_answered = $opinion->check_answer($course->id, $USER->id);
+
+            if($is_answered == false){
+
+                $this->content->items[] = html_writer::tag('a', get_string('searchavailable', 'block_user_opinion'), array('href' => $CFG->wwwroot.'/blocks/user_opinion/search_available.php?courseid='.$course->id));
+                
+            }else{
+
+                $this->content->items[] = html_writer::tag('span', 'Survey Answered', array('class' => 'label label-success'));
+
+            }
+       
         }
 
         return $this->content;

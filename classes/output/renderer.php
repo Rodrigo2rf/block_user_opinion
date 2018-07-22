@@ -54,11 +54,40 @@ class Renderer extends RendererForm{
               $output .= $value->config == 1 ? '<td><span class="label label-success">Instance configured</span></td>' : '<td><span class="label label-warning">Instance not configured</span></td>';
               $output .= $value->active == 1 ? '<td><span class="label label-success">Instance enabled</span></td>' : '<td><span class="label label-warning">Instance not enabled</span></td>';
               $output .= $value->count_submission >= 1 ? '<td><span class="label label-success">'.$value->count_submission.' submissions</span></td>' : '<td><span class="label label-warning">No submission</span></td>';
+              $output .= '<td><a href="manage_reviews.php?courseid='.$value->id.'">Check reviews</a></td>';
             $output .= '</tr>';
           }
           $output .= '</tbody>';
         $output .= '</table>';
       return $output;
+    }
+
+    /**
+     * Render search form.
+     *
+     * @param renderable $searchform The search form.
+     * @return string
+     */
+    public function renderer_reviews_list($reviews){
+      $output = '<table class="table table-hover">';
+      $output .= '<tbody>';
+        $i = 0;
+        foreach($reviews as $key => $value){
+          $i++;
+          $output .= '<tr>';
+            $output .= '<th>'.$i.'</th>';
+            $output .= '<td>'.$value->username.'</td>';
+            $output .= '<td>'.gmdate("d-m-Y", $value->timecreated ).'</td>';
+            $output .= '<td>'.$value->grades.'</td>';
+            $output .= '<td>'.$value->message.'</td>';
+            $output .= $value->shared == 1 ? '<td><span class="label label-success">Shared</span></td>' : '<td><span class="label label-warning">Not share</span></td>';
+            if( $value->shared == 1 ){ $option = 0; }else{ $option = 1; }
+            $output .= '<td><a href="manage_reviews.php?courseid='.$value->courseid.'&reviewid='.$value->id.'&shared='.$option.'">Share</a></td>';
+          $output .= '</tr>';
+        }
+        $output .= '</tbody>';
+        $output .= '</table>';
+      return $output;     
     }
 
 

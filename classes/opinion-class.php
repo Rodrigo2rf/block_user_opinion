@@ -22,8 +22,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace block_user_opinion;
-
 class Opinion {
 
     private $id;
@@ -32,16 +30,67 @@ class Opinion {
     private $grades;
     private $timecreated;
     private $message;
-    private $show;
+    private $shared;
 
-    public function __construct( $id = NULL, $userid = NULL, $instance = NULL, $grades = NULL, $timecreated = NULL, $message = NULL, $show = NULL ){
+    public function __construct( $id = NULL, $userid = NULL, $instance = NULL, $grades = NULL, $timecreated = NULL, $message = NULL, $shared = NULL ){
         $this->id = $id;
         $this->userid = $userid;
         $this->instance = $instance;
         $this->grades = $grades;
         $this->timecreated = $timecreated;
         $this->message = $message;
-        $this->show = $show;
+        $this->shared = $shared;
+    }
+
+    /**
+     * 
+     * @param 
+     * @return 
+     */
+    function saveData($record){
+        global $DB;
+	    $return = $DB->insert_record('block_user_opinion_messages', $record);
+	    if($return){
+            return true;
+	    }else{
+	        return false;
+	    }
+    }
+
+    /**
+     * 
+     * @param 
+     * @return 
+     */
+    function edit_review($review){
+        global $DB;
+        $DB->update_record( "block_user_opinion_messages", $review );
+    }
+
+    /**
+     * 
+     * @param 
+     * @return 
+     */
+    function check_answer($course, $user){
+        global $DB;
+        $return = $DB->get_records('block_user_opinion_messages', array('courseid' => $course, 'userid' => $user));
+        if(!empty($return)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    /**
+     * 
+     * @param 
+     * @return 
+     */
+    function get_review_by_id($id){
+        global $DB;
+        $return = $DB->get_record('block_user_opinion_messages', array('id' => $id));
+        return $return;
     }
 
 }

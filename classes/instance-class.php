@@ -62,13 +62,13 @@ class Instance extends Renderer{
                 ELSE 0
             END AS active,
             CASE
-                WHEN ( SELECT COUNT(DISTINCT courseid) FROM mdl_block_user_opinion_messages WHERE courseid = c.id  ) != NULL THEN 
-                    ( SELECT COUNT(DISTINCT courseid) FROM mdl_block_user_opinion_messages WHERE courseid = c.id )
+                WHEN ( SELECT COUNT(*) FROM mdl_block_user_opinion_messages WHERE courseid = c.id  ) > 0 THEN 
+                    ( SELECT COUNT(*) FROM mdl_block_user_opinion_messages WHERE courseid = c.id )
                 ELSE 0
             END AS count_submission, c.fullname FROM mdl_course AS c
         WHERE c.id IN ( SELECT instanceid FROM mdl_context AS cx WHERE cx.id IN ( 
         SELECT parentcontextid FROM mdl_block_instances WHERE blockname = 'user_opinion' ))";
-        
+
         return $DB->get_records_sql($sql);    
     }
 
@@ -94,6 +94,21 @@ class Instance extends Renderer{
         INNER JOIN mdl_course AS c ON c.id = oc.courseid  
         WHERE courseid = " . $courseid;
         return $DB->get_record_sql($sql);
+    }
+
+
+    /**
+     * 
+     * @param 
+     * @return 
+     */
+    function get_reviews($courseid){
+        global $DB;
+        $sql = "SELECT ROW_NUMBER() OVER (ORDER BY bu.id) AS indice, bu.id, bu.timecreated, bu.shared, bu.grades, bu.courseid, bu.userid, bu.message, u.firstname || ' ' || u.lastname AS username, c.fullname FROM mdl_block_user_opinion_messages AS bu 
+        INNER JOIN mdl_course AS c ON c.id = bu.courseid 
+        INNER JOIN mdl_user AS u ON u.id = bu.userid
+        WHERE c.id = " . $courseid;
+        return $DB->get_records_sql($sql);
     }
 
 
