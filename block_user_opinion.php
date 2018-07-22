@@ -24,6 +24,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once(dirname(__FILE__) . "/classes/instance-class.php");
+
+
 class block_user_opinion extends block_list{
 
     function init() {
@@ -42,6 +45,7 @@ class block_user_opinion extends block_list{
         $this->content->footer = '';
 
         $course = $this->page->course;
+
         $context_sys = context_system::instance();
 
         if( has_capability('block/user_opinion:manager', $context_sys) ) {
@@ -52,11 +56,14 @@ class block_user_opinion extends block_list{
 
         }
 
-        $this->content->items[] = html_writer::tag('a', get_string('searchavailable', 'block_user_opinion'), array('href' => $CFG->wwwroot.'/blocks/user_opinion/search_available.php'));
-
-        // return $course;
+        $instance = new Instance();
+        $inst = $instance->get_instance_by_courseid($course->id);
+        if( $inst->timeopen <= time() && $inst->timefinish >= time() ){
+            $this->content->items[] = html_writer::tag('a', get_string('searchavailable', 'block_user_opinion'), array('href' => $CFG->wwwroot.'/blocks/user_opinion/search_available.php?courseid='.$course->id));
+        }
 
         return $this->content;
+        
     }
 
     public function applicable_formats() {

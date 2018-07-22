@@ -15,20 +15,33 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * User Opinion block caps.
+ * User Opinion block
  *
  * @package    block_user_opinion
  * @copyright  Rodrigo Reinaldo <rodrigo_2rf@hotmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+namespace block_user_opinion;
 
-$settings->add(new admin_setting_heading('sampleheader',
-                                         get_string('headerconfig', 'block_user_opinion'),
-                                         get_string('descconfig', 'block_user_opinion')));
+class Opinion {
 
-$settings->add(new admin_setting_configcheckbox('user_opinion/foo',
-                                                get_string('labelfoo', 'block_user_opinion'),
-                                                get_string('descfoo', 'block_user_opinion'),
-                                                '0'));
+    private $id;
+    private $userid;
+    private $instance;
+    private $grades;
+    private $timecreated;
+    private $message;
+    private $show;
+
+    public function __construct( $id = NULL, $userid = NULL, $instance = NULL, $grades = NULL, $timecreated = NULL, $message = NULL, $show = NULL ){
+        $this->id = $id;
+        $this->userid = $userid;
+        $this->instance = $instance;
+        $this->grades = $grades;
+        $this->timecreated = $timecreated;
+        $this->message = $message;
+        $this->show = $show;
+    }
+
+}

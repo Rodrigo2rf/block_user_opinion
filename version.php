@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2018071901;
+$plugin->version   = 2018071902;
 $plugin->requires  = 2018010900;
 $plugin->component = 'block_user_opinion';
 $plugin->maturity  = MATURITY_BETA;
