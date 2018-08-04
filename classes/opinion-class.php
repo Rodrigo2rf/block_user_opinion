@@ -90,7 +90,7 @@ class Opinion {
     function get_all_can_shared(){
         global $DB;
         $sql = "SELECT bu.id, bu.timecreated, bu.message, 
-        u.firstname || ' ' || u.lastname AS username, c.fullname AS curso FROM mdl_block_user_opinion_messages AS bu 
+        u.firstname || ' ' || u.lastname AS username, c.fullname FROM mdl_block_user_opinion_messages AS bu 
                 INNER JOIN mdl_course AS c ON c.id = bu.courseid 
                 INNER JOIN mdl_user AS u ON u.id = bu.userid
                 WHERE bu.shared = 1";
