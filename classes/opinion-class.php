@@ -89,8 +89,12 @@ class Opinion {
      */
     function get_all_can_shared(){
         global $DB;
-        $return = $DB->get_records('block_user_opinion_messages', array('shared' => 1));
-        return $return;
+        $sql = "SELECT bu.id, bu.timecreated, bu.message, 
+        u.firstname || ' ' || u.lastname AS username, c.fullname AS curso FROM mdl_block_user_opinion_messages AS bu 
+                INNER JOIN mdl_course AS c ON c.id = bu.courseid 
+                INNER JOIN mdl_user AS u ON u.id = bu.userid
+                WHERE bu.shared = 1";
+        return $DB->get_records_sql($sql);
     }
 
     /**

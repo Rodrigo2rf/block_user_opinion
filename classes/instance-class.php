@@ -79,7 +79,7 @@ class Instance extends Renderer{
      */
     function get_course_by_id( $courseid ){
         global $DB;
-        $sql = "SELECT ROW_NUMBER() OVER (ORDER BY id) AS indice, c.id, c.fullname FROM mdl_course AS c WHERE id = " . $courseid;
+        $sql = "SELECT c.id, c.fullname FROM mdl_course AS c WHERE id = " . $courseid;
         return $DB->get_records_sql($sql);
     }
 
